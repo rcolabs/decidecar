@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DecideCar — by RCO Labs</title>
+  <title>DecideCar — RCO Labs</title>
   <style>
     :root{
-      --bg:#F7F7F7;
+      --bg:#F6F7F9;
       --card:#FFFFFF;
-      --text:#243241;
-      --muted:#607284;
-      --border:#EAEAEA;
-      --primary:#5D7A99;
-      --primary2:#4A6280;
-      --warn-bg:#FFF8E1;
-      --warn:#FFC107;
+      --text:#1F2937;
+      --muted:#6B7280;
+      --border:rgba(17,24,39,.10);
+      --shadow:0 10px 30px rgba(17,24,39,.08);
+      --primary:#111827;
+      --primary2:#0B1220;
+      --good:#0E9F6E;
+      --bad:#DC2626;
+      --chip:#F3F4F6;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -22,79 +24,86 @@
       background:var(--bg); color:var(--text); line-height:1.55;
       -webkit-font-smoothing:antialiased;
     }
-    .container{max-width:520px;margin:0 auto;min-height:100vh;padding:16px 16px 92px;}
+    .container{max-width:560px;margin:0 auto;min-height:100vh;padding:16px 16px 92px;}
     .screen{display:none}
     .screen.active{display:block}
 
-    /* Top bar */
     .topbar{
       position:sticky; top:0; z-index:50;
-      background:rgba(247,247,247,.92);
+      background:rgba(246,247,249,.92);
       backdrop-filter:saturate(180%) blur(10px);
-      border-bottom:1px solid rgba(234,234,234,.7);
-      padding:10px 0;
+      border-bottom:1px solid rgba(17,24,39,.08);
       margin:0 -16px 14px;
     }
     .topbar-inner{
-      max-width:520px; margin:0 auto; padding:0 16px;
+      max-width:560px; margin:0 auto; padding:10px 16px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    .brand{display:flex;flex-direction:column;line-height:1.1}
-    .brand .name{font-weight:800;letter-spacing:.2px}
-    .brand .sub{font-size:12px;color:var(--muted);font-weight:600}
+    .brand{display:flex;flex-direction:column;line-height:1.08}
+    .brand .name{font-weight:900;letter-spacing:.2px}
+    .brand .sub{font-size:12px;color:var(--muted);font-weight:700}
     .iconbtn{
       border:1px solid var(--border);
       background:var(--card);
-      padding:10px 12px;border-radius:12px;
-      font-weight:700;color:var(--primary);
+      padding:10px 12px;border-radius:14px;
+      font-weight:800;color:var(--primary);
       cursor:pointer;
+      box-shadow: 0 1px 0 rgba(17,24,39,.04);
     }
     .iconbtn:active{transform:translateY(1px)}
 
-    .hero{padding:10px 0 18px;text-align:center}
-    .hero h1{font-size:30px;line-height:1.15;margin-top:8px}
+    .hero{padding:12px 0 18px;text-align:left}
+    .hero h1{font-size:30px;line-height:1.12;margin-top:6px;letter-spacing:-.4px}
     .hero p{margin-top:10px;color:var(--muted);font-size:16px}
-    .pillrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
-    .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);background:var(--card);padding:6px 10px;border-radius:999px;font-weight:600}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      font-size:12px;font-weight:800;
+      color:rgba(17,24,39,.72);
+      background:var(--chip);
+      padding:7px 10px;border-radius:999px;
+      border:1px solid rgba(17,24,39,.06);
+    }
 
     .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:14px;
+      border-radius:18px;
       padding:18px;
       margin-bottom:12px;
+      box-shadow: var(--shadow);
     }
-    .card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
-    .card-header h3{font-size:17px;font-weight:700}
-    .toggle{font-size:20px;color:var(--primary);font-weight:900}
-    .card-body{margin-top:14px}
-    .card-body.collapsed{display:none}
+    .card-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .card-header h3{font-size:16px;font-weight:900}
+    .card-sub{margin-top:6px;color:var(--muted);font-size:13px;font-weight:650}
 
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media (max-width:380px){.grid2{grid-template-columns:1fr}}
-
-    label{display:block;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:6px}
+    @media (max-width:420px){.grid2{grid-template-columns:1fr}}
+    label{display:block;font-size:13px;color:var(--muted);font-weight:900;margin-bottom:6px}
     input,select{
       width:100%;
       padding:12px 12px;
-      border:1px solid #D1D5DB;border-radius:12px;
+      border:1px solid rgba(17,24,39,.16);
+      border-radius:14px;
       font-size:16px;color:var(--text);
       background:#fff;
     }
-    input:focus,select:focus{outline:none;border-color:var(--primary)}
-    .help{margin-top:6px;font-size:12px;color:#7b8c9b}
+    input:focus,select:focus{outline:none;border-color:rgba(17,24,39,.45)}
+    .help{margin-top:6px;font-size:12px;color:rgba(107,114,128,.95);font-weight:650}
+
     .btn{
       width:100%;
       padding:14px 16px;
-      border:none;border-radius:14px;
+      border:none;border-radius:16px;
       background:var(--primary);color:#fff;
-      font-size:16px;font-weight:800;cursor:pointer;
+      font-size:16px;font-weight:950;cursor:pointer;
+      letter-spacing:-.1px;
     }
     .btn:hover{background:var(--primary2)}
     .btn.secondary{
       background:#fff;color:var(--primary);
-      border:2px solid var(--primary);
+      border:2px solid rgba(17,24,39,.28);
     }
+    .btn.small{padding:10px 12px;border-radius:14px;font-size:14px}
     .rowbtns{display:flex;gap:10px}
     .rowbtns .btn{flex:1}
 
@@ -102,61 +111,124 @@
       position:fixed; left:0; right:0; bottom:0; z-index:60;
       background:rgba(255,255,255,.92);
       backdrop-filter:saturate(180%) blur(10px);
-      border-top:1px solid rgba(234,234,234,.9);
+      border-top:1px solid rgba(17,24,39,.10);
       padding:12px 16px;
     }
-    .cta-fixed-inner{max-width:520px;margin:0 auto}
-    .result-main{text-align:center}
+    .cta-fixed-inner{max-width:560px;margin:0 auto}
+
     .badge{
-      display:inline-block;
-      background:#E8F4F8;color:var(--primary);
-      padding:7px 14px;border-radius:999px;
-      font-weight:900;font-size:13px;margin-top:6px
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(17,24,39,.06); color:var(--primary);
+      padding:8px 12px;border-radius:999px;
+      font-weight:950;font-size:13px;margin-top:6px;
+      border:1px solid rgba(17,24,39,.08);
     }
-    .big{font-size:42px;font-weight:900;color:var(--primary);margin:10px 0 6px;letter-spacing:-.5px}
+    .big{font-size:40px;font-weight:1000;color:var(--primary);margin:10px 0 6px;letter-spacing:-.7px}
     .muted{color:var(--muted)}
-    .diff{font-weight:900;margin-top:8px}
+    .diff{font-weight:950;margin-top:8px}
     .insight{
-      background:var(--warn-bg);
-      border-left:4px solid var(--warn);
-      padding:14px;border-radius:12px;
-      color:#556574;font-weight:700;font-size:14px;
+      background:#F8FAFC;
+      border:1px solid rgba(17,24,39,.10);
+      padding:14px;border-radius:14px;
+      color:rgba(31,41,55,.90);
+      font-weight:750;font-size:14px;
     }
-
+    .trust{
+      margin-top:10px;
+      background:rgba(14,159,110,.08);
+      border:1px solid rgba(14,159,110,.18);
+      padding:12px;border-radius:14px;
+      color:rgba(17,24,39,.88);
+      font-weight:750;font-size:13px;
+    }
+    .trust ul{margin:8px 0 0 16px}
+    .trust li{margin:4px 0}
     .kpi3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-    @media (max-width:420px){.kpi3{grid-template-columns:1fr}}
-    .kpi{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
-    .kpi .t{font-size:12px;color:var(--muted);font-weight:800}
-    .kpi .v{margin-top:6px;font-size:18px;font-weight:900}
+    @media (max-width:520px){.kpi3{grid-template-columns:1fr}}
+    .kpi{border:1px solid rgba(17,24,39,.10);border-radius:16px;padding:14px;background:#fff}
+    .kpi .t{font-size:12px;color:var(--muted);font-weight:950}
+    .kpi .v{margin-top:6px;font-size:18px;font-weight:1000}
 
-    .section-title{font-size:15px;font-weight:900;margin-bottom:10px;color:var(--text)}
-    .divider{height:1px;background:#F0F0F0;margin:10px 0}
+    .section-title{font-size:14px;font-weight:1000;margin-bottom:10px;color:rgba(17,24,39,.92)}
+    .divider{height:1px;background:rgba(17,24,39,.08);margin:12px 0}
 
+    .chart-wrap{
+      padding:12px;
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:16px;
+      background:#fff;
+    }
     canvas{width:100%;height:220px}
-    .chart-wrap{padding:12px;border:1px solid var(--border);border-radius:14px;background:#fff}
-    .chart-note{font-size:12px;color:var(--muted);margin-top:8px}
+    .chart-note{font-size:12px;color:var(--muted);margin-top:8px;font-weight:650}
 
-    .link{color:var(--primary);font-weight:800;text-decoration:underline;cursor:pointer;text-align:center;display:block;margin:14px 0}
-    .disclaimer{font-size:12px;color:#8aa0b0;text-align:center;margin-top:18px;line-height:1.35}
+    .advanced-toggle{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      width:100%;
+      background:rgba(17,24,39,.04);
+      border:1px solid rgba(17,24,39,.10);
+      padding:12px 14px;border-radius:16px;
+      cursor:pointer;
+      font-weight:950;
+    }
+    .advanced-toggle span{color:rgba(17,24,39,.78);font-size:14px}
+    .advanced-toggle .right{color:rgba(17,24,39,.55);font-weight:1000}
+    .advanced-panel{display:none;margin-top:12px}
+    .advanced-panel.open{display:block}
 
-    /* Modal + toast */
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:18px}
-    .modal.active{display:flex}
-    .modal-content{background:#fff;border-radius:14px;padding:20px;max-width:520px;max-height:80vh;overflow:auto}
-    .modal-content h3{font-size:18px;margin-bottom:10px}
-    .modal-content ul{list-style:none}
-    .modal-content li{position:relative;padding:8px 0 8px 22px;color:var(--muted);font-weight:700;font-size:14px}
-    .modal-content li:before{content:"✓";position:absolute;left:0;color:var(--primary);font-weight:900}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:86px;z-index:300;background:#243241;color:#fff;border-radius:10px;padding:10px 14px;font-weight:800;font-size:13px;display:none}
+    .linkish{
+      background:transparent;border:0;cursor:pointer;
+      color:rgba(17,24,39,.78);
+      font-weight:900;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+    .link-row{display:flex;justify-content:center;margin-top:12px}
+    .disclaimer{font-size:12px;color:rgba(107,114,128,.92);text-align:center;margin-top:16px;line-height:1.35}
+
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:86px;z-index:300;background:#111827;color:#fff;border-radius:12px;padding:10px 14px;font-weight:900;font-size:13px;display:none}
     .toast.show{display:block;animation:in .25s, out .25s 2.6s}
     @keyframes in{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
     @keyframes out{from{opacity:1}to{opacity:0}}
+
+    .modal{position:fixed;inset:0;display:none;z-index:9999}
+    .modal.is-open{display:block}
+    .modal__backdrop{position:absolute;inset:0;background:rgba(15,23,42,.32);backdrop-filter: blur(6px)}
+    .modal__panel{
+      position:relative;
+      width:min(760px, calc(100vw - 28px));
+      max-height: calc(100vh - 28px);
+      margin: 14px auto;
+      background:#fff;
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+      overflow:hidden;
+      display:flex;flex-direction:column;
+    }
+    .modal__header{padding:18px 18px 12px;border-bottom:1px solid rgba(0,0,0,.06);position:relative}
+    .modal__kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-bottom:6px;font-weight:900}
+    .modal__title{margin:0;font-size:18px;line-height:1.25;font-weight:1000}
+    .modal__close{
+      position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:12px;
+      border:1px solid rgba(0,0,0,.08);background:#fff;cursor:pointer;opacity:.85;font-weight:1000;
+    }
+    .modal__close:hover{opacity:1}
+    .modal__body{padding:16px 18px;overflow:auto;-webkit-overflow-scrolling:touch}
+    .modal__divider{border:0;border-top:1px solid rgba(0,0,0,.08);margin:14px 0}
+    .modal__footer{padding:12px 18px 16px;border-top:1px solid rgba(0,0,0,.06);display:flex;justify-content:flex-end}
+    .manifesto__h{margin:0 0 10px;font-size:14px;opacity:.82;font-weight:1000}
+    .manifesto__lead{margin:0 0 10px;font-size:15px}
+    .manifesto p{margin:0 0 10px;line-height:1.45;opacity:.92}
+    .manifesto__list{margin:6px 0 10px 18px;padding:0;line-height:1.45;opacity:.92}
+    .manifesto__closing{margin-top:8px}
+    .btn-primary{
+      background:#111827;color:#fff;border:0;padding:10px 14px;border-radius:14px;cursor:pointer;font-weight:900;font-size:14px
+    }
+    .btn-primary:hover{filter:brightness(1.05)}
   </style>
 </head>
 <body>
   <div class="container">
 
-    <!-- HOME -->
     <section id="screen-home" class="screen active">
       <div class="topbar">
         <div class="topbar-inner">
@@ -164,28 +236,30 @@
             <div class="name">DecideCar</div>
             <div class="sub">by RCO Labs</div>
           </div>
-          <button class="iconbtn" onclick="openModal()">O que calcula?</button>
+          <button class="iconbtn" onclick="openHelp()">Ajuda</button>
         </div>
       </div>
 
       <div class="hero">
         <h1>Comprar ou assinar um carro?</h1>
-        <p>Compare o custo real e decida com critério em poucos minutos.</p>
-        <div class="pillrow">
-          <span class="pill">Sem cadastro</span>
-          <span class="pill">Sem anúncios</span>
-          <span class="pill">Compartilhável</span>
+        <p>Decida com números claros — custo mensal, anual e no prazo total.</p>
+        <div class="chips">
+          <span class="chip">Modo rápido (default)</span>
+          <span class="chip">Premissas editáveis no avançado</span>
+          <span class="chip">Sem cadastro</span>
         </div>
       </div>
 
-      <button class="btn" onclick="goToInputs()">Começar (Modo rápido)</button>
-      <button class="btn secondary" style="margin-top:10px" onclick="goToInputs(true)">Começar (Modo avançado)</button>
-      <div class="disclaimer" style="margin-top:16px">
+      <button class="btn" onclick="goToInputs(false)">Simular (modo rápido)</button>
+      <div class="link-row">
+        <button class="linkish" onclick="goToInputs(true)">Quero ajustar premissas (modo avançado)</button>
+      </div>
+
+      <div class="disclaimer" style="margin-top:14px">
         Ferramenta de apoio à decisão. Resultados dependem das premissas informadas.
       </div>
     </section>
 
-    <!-- INPUTS -->
     <section id="screen-inputs" class="screen">
       <div class="topbar">
         <div class="topbar-inner">
@@ -194,83 +268,129 @@
             <div class="name">DecideCar</div>
             <div class="sub">Modo rápido</div>
           </div>
-          <button class="iconbtn" onclick="openModal()">Ajuda</button>
+          <button class="iconbtn" onclick="openHelp()">Ajuda</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header" onclick="toggleCard(this)">
-          <h3>🚗 Compra</h3><span class="toggle">−</span>
+        <div class="card-header">
+          <h3>Modo rápido (recomendado)</h3>
         </div>
-        <div class="card-body">
-          <div class="form-group">
+        <div class="card-sub">4 inputs e você decide. As premissas ficam no modo avançado.</div>
+
+        <div style="height:14px"></div>
+
+        <div class="grid2">
+          <div>
             <label>Preço do carro 0 km (R$)</label>
             <input type="text" id="preco" inputmode="numeric" value="150.000">
+            <div class="help">Valor total do carro. (Sem financiamento no modelo.)</div>
           </div>
-          <div class="grid2">
-            <div class="form-group">
-              <label>IPVA (% ao ano)</label>
-              <input type="text" id="ipva" inputmode="decimal" value="4">
-            </div>
-            <div class="form-group">
-              <label>Desvalorização anual (%)</label>
-              <input type="text" id="desvalorizacao" inputmode="decimal" value="10">
-            </div>
-          </div>
-          <div class="grid2">
-            <div class="form-group">
-              <label>Seguro anual (R$)</label>
-              <input type="text" id="seguro" inputmode="numeric" value="6.000">
-            </div>
-            <div class="form-group">
-              <label>Revisão anual (R$)</label>
-              <input type="text" id="revisao" inputmode="numeric" value="1.200">
-            </div>
-          </div>
-          <div class="form-group">
+          <div>
             <label>Prazo</label>
             <select id="prazo">
               <option value="12">12 meses</option>
-              <option value="24">24 meses</option>
+              <option value="24" selected>24 meses</option>
               <option value="36">36 meses</option>
-              <option value="48" selected>48 meses</option>
+              <option value="48">48 meses</option>
             </select>
-            <div class="help">Dica: prazos curtos penalizam mais a compra por causa da troca (revenda).</div>
+            <div class="help">Prazo para comparar (compra vs assinatura).</div>
           </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="card-header" onclick="toggleCard(this)">
-          <h3>🔁 Assinatura</h3><span class="toggle">−</span>
-        </div>
-        <div class="card-body">
-          <div class="grid2">
-            <div class="form-group">
-              <label>Mensalidade (R$)</label>
-              <input type="text" id="mensalidade" inputmode="numeric" value="2.800">
-            </div>
-            <div class="form-group">
-              <label>Reajuste anual (%)</label>
-              <input type="text" id="reajuste" inputmode="decimal" value="6">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Custo extra anual (R$)</label>
-            <input type="text" id="extra" inputmode="numeric" value="0">
-          </div>
-        </div>
-      </div>
+        <div style="height:10px"></div>
 
-      <div class="card">
-        <div class="card-header" onclick="toggleCard(this)">
-          <h3>💰 Seu dinheiro</h3><span class="toggle">−</span>
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label>Rentabilidade anual do capital (%)</label>
+        <div class="grid2">
+          <div>
+            <label>Mensalidade da assinatura (R$)</label>
+            <input type="text" id="mensalidade" inputmode="numeric" value="2.800">
+            <div class="help">Mensalidade base do contrato.</div>
+          </div>
+          <div>
+            <label>Rentabilidade do seu capital (% ao ano)</label>
             <input type="text" id="rentabilidade" inputmode="decimal" value="12">
-            <div class="help">É quanto seu dinheiro renderia se não fosse usado na compra.</div>
+            <div class="help">Quanto seu dinheiro renderia se não comprasse o carro.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="advanced-toggle" type="button" onclick="toggleAdvanced()">
+          <span>Modo avançado (ajustar premissas)</span>
+          <span class="right" id="advancedArrow">+</span>
+        </button>
+        <div class="card-sub" style="margin-top:10px">
+          Use apenas se quiser personalizar premissas (IPVA, seguro, desvalorização, reajuste, extras).
+        </div>
+
+        <div id="advancedPanel" class="advanced-panel">
+          <div style="height:12px"></div>
+
+          <div class="section-title">Premissas da compra</div>
+          <div class="grid2">
+            <div>
+              <label>IPVA (% ao ano)</label>
+              <input type="text" id="ipva_pct" inputmode="decimal" value="4">
+              <div class="help">Default (modo rápido): 4%.</div>
+            </div>
+            <div>
+              <label>Seguro (R$ / ano)</label>
+              <input type="text" id="seguro_anual" inputmode="numeric" value="6.000">
+              <div class="help">Default: R$ 6.000/ano.</div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="grid2">
+            <div>
+              <label>Revisões / manutenção (R$ / ano)</label>
+              <input type="text" id="manut_anual" inputmode="numeric" value="1.200">
+              <div class="help">Default: R$ 1.200/ano.</div>
+            </div>
+            <div>
+              <label>Manutenção a cada X meses</label>
+              <input type="text" id="manut_meses" inputmode="numeric" value="12">
+              <div class="help">Default: 12 meses (1x/ano).</div>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="grid2">
+            <div>
+              <label>Desvalorização inicial 0 km (%)</label>
+              <input type="text" id="desval_inicial" inputmode="decimal" value="12">
+              <div class="help">Default: 12% ao sair da loja.</div>
+            </div>
+            <div>
+              <label>Desvalorização anual (%)</label>
+              <input type="text" id="desval_anual" inputmode="decimal" value="10">
+              <div class="help">Default: 10% ao ano.</div>
+            </div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div class="section-title">Premissas da assinatura</div>
+          <div class="grid2">
+            <div>
+              <label>Reajuste anual do contrato (%)</label>
+              <input type="text" id="reajuste_pct" inputmode="decimal" value="6">
+              <div class="help">Default: 6% ao ano.</div>
+            </div>
+            <div>
+              <label>Custo extra anual (R$)</label>
+              <input type="text" id="extra_anual" inputmode="numeric" value="0">
+              <div class="help">Ex.: excedente de km, serviços, etc.</div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="rowbtns">
+            <button class="btn secondary small" type="button" onclick="resetAdvanced()">Resetar avançado</button>
+            <button class="btn small" type="button" onclick="calcular()">Recalcular</button>
           </div>
         </div>
       </div>
@@ -282,7 +402,6 @@
       </div>
     </section>
 
-    <!-- RESULT -->
     <section id="screen-result" class="screen">
       <div class="topbar">
         <div class="topbar-inner">
@@ -296,30 +415,33 @@
       </div>
 
       <div class="card">
-        <div class="result-main">
-          <div class="muted" style="font-weight:900">Melhor decisão no seu perfil</div>
-          <div class="badge" id="winner-badge"></div>
-          <div class="big" id="winner-value"></div>
-          <div class="muted" id="other-option"></div>
-          <div class="diff" id="difference"></div>
-        </div>
+        <div class="muted" style="font-weight:950">Recomendação do DecideCar</div>
+        <div class="badge" id="winner-badge"></div>
+        <div class="big" id="winner-value"></div>
+        <div class="muted" id="other-option"></div>
+        <div class="diff" id="difference"></div>
       </div>
 
       <div class="card">
-        <div class="section-title">Recomendação do DecideCar</div>
         <div class="insight" id="insight-text"></div>
-        <div class="divider"></div>
-        <div class="section-title">Por que confiar neste resultado?</div>
-        <div class="help" style="margin:0;font-size:13px;line-height:1.55;color:var(--muted);font-weight:800">
-          • Consideramos custos recorrentes (IPVA, seguro e revisões)<br>
-          • Consideramos a desvalorização estimada do carro no período<br>
-          • Consideramos o custo (ou benefício) do dinheiro no tempo<br>
-          • Todas as premissas são editáveis
+
+        <div class="trust">
+          <div style="font-weight:1000">Por que confiar?</div>
+          <ul>
+            <li>Considera custos recorrentes, desvalorização e custo/benefício do dinheiro no tempo</li>
+            <li>Mostra custo mensal, anual e total no prazo</li>
+            <li>Premissas são editáveis no modo avançado</li>
+            <li>Sem cadastro, sem anúncio, sem viés</li>
+          </ul>
+        </div>
+
+        <div class="link-row" style="margin-top:12px">
+          <button class="linkish" onclick="openManifesto()">Por trás do DecideCar →</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="section-title">Impacto no tempo</div>
+        <div class="section-title">Resumo no tempo</div>
         <div class="kpi3">
           <div class="kpi">
             <div class="t">Compra (ano)</div>
@@ -337,7 +459,9 @@
             <div class="help">Comparação anualizada.</div>
           </div>
         </div>
+
         <div class="divider"></div>
+
         <div class="kpi3">
           <div class="kpi">
             <div class="t">Compra (total)</div>
@@ -358,230 +482,168 @@
       </div>
 
       <div class="card">
-        <div class="section-title">Gráficos comparativos</div>
+        <div class="section-title">Gráficos claros</div>
 
         <div class="chart-wrap">
-          <div class="muted" style="font-weight:900;margin-bottom:8px">Como o custo evolui ao longo do tempo</div>
-          <canvas id="chartLine" width="480" height="220"></canvas>
-          <div class="chart-note">Linha 1: Compra • Linha 2: Assinatura</div>
+          <div class="muted" style="font-weight:950;margin-bottom:8px">Custo total no prazo (Compra vs Assinatura)</div>
+          <canvas id="chartTotal" width="520" height="220"></canvas>
+          <div class="chart-note">Barras lado a lado no período escolhido.</div>
         </div>
 
         <div style="height:12px"></div>
 
         <div class="chart-wrap">
-          <div class="muted" style="font-weight:900;margin-bottom:8px">De onde vem o custo total</div>
-          <canvas id="chartBars" width="480" height="220"></canvas>
-          <div class="chart-note">Barras: principais componentes do custo no período.</div>
+          <div class="muted" style="font-weight:950;margin-bottom:8px">O que mais pesa (composição)</div>
+          <canvas id="chartMix" width="520" height="220"></canvas>
+          <div class="chart-note">Componentes principais da compra e da assinatura.</div>
         </div>
       </div>
 
       <div class="rowbtns">
-        <button class="btn secondary" onclick="toggleAdvanced()">Modo avançado</button>
-        <button class="btn" onclick="showScreen('screen-inputs')">Editar inputs</button>
+        <button class="btn secondary" onclick="showScreen('screen-inputs')">Editar inputs</button>
+        <button class="btn" onclick="compartilhar()">Copiar convite</button>
       </div>
-
-      <div id="advanced-panel" class="card" style="display:none;margin-top:12px">
-        <div class="section-title">Modo avançado (opcional)</div>
-
-        <div class="muted" style="font-weight:900;margin:10px 0 8px">Compra</div>
-        <div class="grid2">
-          <div class="form-group">
-            <label>Desvalorização ao sair da loja (%)</label>
-            <input type="text" id="desval-saida" inputmode="decimal" placeholder="Ex.: 12">
-          </div>
-          <div class="form-group">
-            <label>Desconto na venda vs FIPE (%)</label>
-            <input type="text" id="desconto-fipe" inputmode="decimal" placeholder="Ex.: 5">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Revisão a cada X meses</label>
-          <input type="text" id="revisao-meses" inputmode="numeric" placeholder="Ex.: 10">
-        </div>
-
-        <div class="muted" style="font-weight:900;margin:12px 0 8px">Assinatura</div>
-        <div class="grid2">
-          <div class="form-group">
-            <label>Km/mês contratado</label>
-            <input type="text" id="km-contratado" inputmode="numeric" placeholder="Ex.: 1000">
-          </div>
-          <div class="form-group">
-            <label>Km/mês usado</label>
-            <input type="text" id="km-usado" inputmode="numeric" placeholder="Ex.: 1400">
-          </div>
-        </div>
-        <div class="grid2">
-          <div class="form-group">
-            <label>Custo excedente (R$/km)</label>
-            <input type="text" id="custo-km" inputmode="decimal" placeholder="Ex.: 0,70">
-          </div>
-          <div class="form-group">
-            <label>Taxa de adesão (R$)</label>
-            <input type="text" id="taxa-adesao" inputmode="numeric" placeholder="Opcional">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Taxa de devolução (R$)</label>
-          <input type="text" id="taxa-devolucao" inputmode="numeric" placeholder="Opcional">
-        </div>
-
-        <div class="rowbtns">
-          <button class="btn" onclick="calcular(true)">Recalcular</button>
-          <button class="btn secondary" onclick="resetarAvancado()">Resetar</button>
-        </div>
-      </div>
-
-      <div class="link" onclick="openManifesto()">Por trás do DecideCar →</div>
 
       <div class="disclaimer">
-        DecideCar — by RCO Labs • Ferramenta de apoio à decisão. Resultados dependem das premissas informadas.
+        DecideCar — by RCO Labs • Ferramenta de apoio à decisão.
       </div>
     </section>
-
-  </div>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <h3>O que isso calcula?</h3>
-      <ul>
-        <li>Compra: IPVA, seguro, revisões, desvalorização e custo do dinheiro no tempo.</li>
-        <li>Assinatura: mensalidades reajustadas, extras e o benefício do capital investido.</li>
-        <li>Resultados em custo mensal equivalente, custo anual e custo total no prazo.</li>
-        <li>Gráficos comparativos para entender como o custo evolui e de onde ele vem.</li>
-        <li>Sem jargão financeiro e com premissas editáveis.</li>
-      </ul>
-      <button class="btn" style="margin-top:12px" onclick="closeModal()">Entendi</button>
-    
-    <!-- Manifesto Modal -->
-  <div id="manifestoModal" class="modal" onclick="closeManifesto(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <h3>Por trás do DecideCar</h3>
-
-      <div style="margin-top:10px">
-        <div class="muted" style="font-weight:900;letter-spacing:.02em">RCO Labs</div>
-        <div style="margin-top:6px;font-weight:900">Decisão melhor começa com estrutura melhor.</div>
-
-        <p style="margin-top:10px">
-          A RCO Labs nasce de uma inquietação simples:<br>
-          boas decisões seguem sendo tomadas com base em intuição, hábito ou discurso pronto — quando poderiam ser tomadas com clareza, estrutura e números simples.
-        </p>
-
-        <p style="margin-top:10px">
-          Nós não construímos ferramentas para parecer inteligentes.<br>
-          Construímos ferramentas para tornar decisões mais óbvias.
-        </p>
-
-        <p style="margin-top:10px;font-weight:900">Acreditamos que:</p>
-        <ul style="margin:6px 0 0 18px;color:var(--muted);font-weight:700;line-height:1.45">
-          <li>complexidade deve ficar no bastidor,</li>
-          <li>a interface deve ser simples,</li>
-          <li>e o resultado precisa orientar uma escolha real.</li>
-        </ul>
-
-        <p style="margin-top:10px">
-          RCO Labs é um laboratório de produtos práticos, criados para pessoas que precisam decidir hoje — não para apresentações bonitas amanhã.
-        </p>
-
-        <p style="margin-top:10px;font-weight:900">
-          Menos achismo.<br>
-          Mais critério.<br>
-          Mais decisão.
-        </p>
-      </div>
-
-      <div class="divider" style="margin:14px 0"></div>
-
-      <div>
-        <div class="muted" style="font-weight:900;letter-spacing:.02em">DecideCar</div>
-        <div style="margin-top:6px;font-weight:900">Decidir carro não deveria ser confuso.</div>
-
-        <p style="margin-top:10px">
-          Comprar ou assinar um carro virou um debate raso.<br>
-          De um lado, quem defende posse.<br>
-          Do outro, quem vende conveniência.
-        </p>
-
-        <p style="margin-top:10px">
-          O DecideCar não escolhe lados.<br>
-          Ele organiza os números.
-        </p>
-
-        <p style="margin-top:10px">
-          Aqui, a decisão não vem de opinião, discurso ou “sensação”.<br>
-          Vem do custo real — mensal, anual e no prazo total — considerando o que mais pesa e quase nunca é comparado:<br>
-          o custo do dinheiro, o tempo e a desvalorização.
-        </p>
-
-        <p style="margin-top:10px;font-weight:900">
-          O DecideCar existe para responder uma única pergunta:
-        </p>
-
-        <p style="margin-top:6px;font-weight:900;font-size:16px">
-          Qual opção custa menos no seu perfil?
-        </p>
-
-        <p style="margin-top:10px;font-weight:900">
-          Sem cadastro.<br>
-          Sem anúncio.<br>
-          Sem viés.
-        </p>
-
-        <p style="margin-top:10px">
-          Só números claros para uma decisão melhor.
-        </p>
-      </div>
-
-      <button class="btn" style="margin-top:14px" onclick="closeManifesto()">Entendi</button>
-    </div>
-  </div>
-
-</div>
-
-
-  </div>
   </div>
 
   <div id="toast" class="toast">Copiado!</div>
 
+  <div id="helpModal" class="modal" aria-hidden="true">
+    <div class="modal__backdrop" onclick="closeHelp()"></div>
+    <div class="modal__panel" role="document">
+      <div class="modal__header">
+        <div class="modal__kicker">DecideCar</div>
+        <h2 class="modal__title">Como usar</h2>
+        <button class="modal__close" type="button" onclick="closeHelp()">✕</button>
+      </div>
+      <div class="modal__body">
+        <div class="manifesto">
+          <p><strong>Modo rápido</strong>: preencha 4 inputs e veja a recomendação.</p>
+          <p><strong>Modo avançado</strong>: ajuste premissas (IPVA, seguro, desvalorização, reajuste, extras) se quiser personalizar.</p>
+          <p>O DecideCar compara custo mensal, anual e no prazo total — com base em custos recorrentes, desvalorização e custo/benefício do dinheiro no tempo.</p>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn-primary" onclick="closeHelp()">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manifestoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="manifestoTitle" aria-hidden="true">
+    <div class="modal__backdrop" onclick="closeManifesto()"></div>
+
+    <div class="modal__panel" role="document">
+      <div class="modal__header">
+        <div class="modal__kicker">RCO Labs</div>
+        <h2 id="manifestoTitle" class="modal__title">Por trás do DecideCar</h2>
+
+        <button class="modal__close" type="button" onclick="closeManifesto()" aria-label="Fechar manifesto">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <section class="manifesto">
+          <h3 class="manifesto__h">Manifesto — RCO Labs</h3>
+
+          <p class="manifesto__lead"><strong>Decisão melhor começa com estrutura melhor.</strong></p>
+
+          <p>
+            A RCO Labs nasce de uma inquietação simples:
+            boas decisões seguem sendo tomadas com base em intuição, hábito ou discurso pronto — quando poderiam ser tomadas com clareza, estrutura e números simples.
+          </p>
+
+          <p>
+            Nós não construímos ferramentas para parecer inteligentes.
+            Construímos ferramentas para tornar decisões mais óbvias.
+          </p>
+
+          <p><strong>Acreditamos que:</strong></p>
+          <ul class="manifesto__list">
+            <li>complexidade deve ficar no bastidor,</li>
+            <li>a interface deve ser simples,</li>
+            <li>e o resultado precisa orientar uma escolha real.</li>
+          </ul>
+
+          <p>
+            RCO Labs é um laboratório de produtos práticos, criados para pessoas que precisam decidir hoje — não para apresentações bonitas amanhã.
+          </p>
+
+          <p class="manifesto__closing">
+            <strong>Menos achismo.</strong><br />
+            <strong>Mais critério.</strong><br />
+            <strong>Mais decisão.</strong>
+          </p>
+        </section>
+
+        <hr class="modal__divider" />
+
+        <section class="manifesto">
+          <h3 class="manifesto__h">Manifesto — DecideCar</h3>
+
+          <p class="manifesto__lead"><strong>Decidir carro não deveria ser confuso.</strong></p>
+
+          <p>
+            Comprar ou assinar um carro virou um debate raso.
+            De um lado, quem defende posse.
+            Do outro, quem vende conveniência.
+          </p>
+
+          <p>
+            O DecideCar não escolhe lados.
+            Ele organiza os números.
+          </p>
+
+          <p>
+            Aqui, a decisão não vem de opinião, discurso ou “sensação”.
+            Vem do custo real — mensal, anual e no prazo total — considerando o que mais pesa e quase nunca é comparado:
+            o custo do dinheiro, o tempo e a desvalorização.
+          </p>
+
+          <p class="manifesto__lead"><strong>Qual opção custa menos no seu perfil?</strong></p>
+
+          <p class="manifesto__closing">
+            Sem cadastro.<br />
+            Sem anúncio.<br />
+            Sem viés.
+          </p>
+
+          <p>Só números claros para uma decisão melhor.</p>
+        </section>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn-primary" onclick="closeManifesto()">Entendi</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let resultadoAtual = null;
 
-    /* ---------- Navigation ---------- */
     function showScreen(id){
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       window.scrollTo(0,0);
     }
-    function goToInputs(openAdvanced=false){
+    function goToInputs(openAdvanced){
       loadFromLocalStorage();
       showScreen('screen-inputs');
+      const panel = document.getElementById('advancedPanel');
+      const arrow = document.getElementById('advancedArrow');
       if(openAdvanced){
-        // will open advanced once results exist; keep as UX promise from home
-        // (optional: could add advanced toggle on inputs too later)
+        panel.classList.add('open');
+        arrow.textContent = '−';
+        document.querySelector('#screen-inputs .brand .sub').textContent = 'Modo avançado';
+      }else{
+        panel.classList.remove('open');
+        arrow.textContent = '+';
+        document.querySelector('#screen-inputs .brand .sub').textContent = 'Modo rápido';
       }
-    }
-
-    /* ---------- Helpers ---------- */
-    function openModal(){ document.getElementById('modal').classList.add('active'); }
-    function closeModal(e){
-      if(!e || e.target.id === 'modal') document.getElementById('modal').classList.remove('active');
-    }
-
-    function openManifesto(){
-      document.getElementById('manifestoModal').classList.add('active');
-    }
-    function closeManifesto(e){
-      if(!e || e.target.id === 'manifestoModal'){
-        document.getElementById('manifestoModal').classList.remove('active');
-      }
-    }
-
-    function showToast(msg){
-      const t = document.getElementById('toast');
-      t.textContent = msg || 'Copiado!';
-      t.classList.add('show');
-      setTimeout(()=>t.classList.remove('show'), 3000);
     }
 
     function parseMoney(str){
@@ -599,26 +661,27 @@
       return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
     }
     function formatCurrency(n){ return 'R$ ' + formatMoneyRaw(n); }
-
     function clampPct(p){
       if(!Number.isFinite(p)) return 0;
       if(p < 0) return 0;
       if(p > 100) return 100;
       return p;
     }
-
-    function toggleCard(header){
-      const body = header.nextElementSibling;
-      const t = header.querySelector('.toggle');
-      body.classList.toggle('collapsed');
-      t.textContent = body.classList.contains('collapsed') ? '+' : '−';
+    function showToast(msg){
+      const t = document.getElementById('toast');
+      t.textContent = msg || 'Copiado!';
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 3000);
     }
 
-    /* ---------- LocalStorage ---------- */
-    const LS_KEY = 'decideCar_v2';
+    const LS_KEY = 'decidecar_v2_experience';
     function saveToLocalStorage(){
-      const ids = ['preco','ipva','seguro','revisao','desvalorizacao','prazo','mensalidade','reajuste','extra','rentabilidade',
-                   'desval-saida','desconto-fipe','revisao-meses','km-contratado','km-usado','custo-km','taxa-adesao','taxa-devolucao'];
+      const ids = [
+        'preco','prazo','mensalidade','rentabilidade',
+        'ipva_pct','seguro_anual','manut_anual','manut_meses',
+        'desval_inicial','desval_anual',
+        'reajuste_pct','extra_anual'
+      ];
       const data = {};
       ids.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
       localStorage.setItem(LS_KEY, JSON.stringify(data));
@@ -635,102 +698,113 @@
       }catch(_){}
     }
 
-    /* ---------- Input masking (light) ---------- */
-    function attachMasks(){
-      const moneyIds = ['preco','seguro','revisao','mensalidade','extra','taxa-adesao','taxa-devolucao'];
-      moneyIds.forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener('blur', ()=>{ el.value = formatMoneyRaw(parseMoney(el.value)); });
-      });
-      const decIds = ['custo-km'];
-      decIds.forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener('blur', ()=>{
-          // keep comma as decimal for display
-          const v = parseMoney(el.value);
-          el.value = (Math.round(v*100)/100).toString().replace('.',',');
-        });
-      });
+    function toggleAdvanced(){
+      const panel = document.getElementById('advancedPanel');
+      const arrow = document.getElementById('advancedArrow');
+      const open = panel.classList.toggle('open');
+      arrow.textContent = open ? '−' : '+';
+      document.querySelector('#screen-inputs .brand .sub').textContent = open ? 'Modo avançado' : 'Modo rápido';
+      if(open) panel.scrollIntoView({behavior:'smooth', block:'start'});
     }
-    attachMasks();
+    function resetAdvanced(){
+      document.getElementById('ipva_pct').value = '4';
+      document.getElementById('seguro_anual').value = '6.000';
+      document.getElementById('manut_anual').value = '1.200';
+      document.getElementById('manut_meses').value = '12';
+      document.getElementById('desval_inicial').value = '12';
+      document.getElementById('desval_anual').value = '10';
+      document.getElementById('reajuste_pct').value = '6';
+      document.getElementById('extra_anual').value = '0';
+      showToast('Premissas resetadas.');
+      saveToLocalStorage();
+    }
 
-    /* ---------- Core calc ---------- */
-    function calcular(fromAdvanced=false){
+    function openManifesto(){
+      const m = document.getElementById('manifestoModal');
+      m.classList.add('is-open');
+      m.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeManifesto(){
+      const m = document.getElementById('manifestoModal');
+      m.classList.remove('is-open');
+      m.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    function openHelp(){
+      const m = document.getElementById('helpModal');
+      m.classList.add('is-open');
+      m.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeHelp(){
+      const m = document.getElementById('helpModal');
+      m.classList.remove('is-open');
+      m.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){
+        const a = document.getElementById('manifestoModal');
+        const h = document.getElementById('helpModal');
+        if(a && a.classList.contains('is-open')) closeManifesto();
+        if(h && h.classList.contains('is-open')) closeHelp();
+      }
+    });
+
+    function calcular(){
       saveToLocalStorage();
 
       const P = parseMoney(document.getElementById('preco').value);
-      const ipva_pct = clampPct(parseFloat(document.getElementById('ipva').value)) / 100;
-      const seguro_anual = parseMoney(document.getElementById('seguro').value);
-      const revisao_anual = parseMoney(document.getElementById('revisao').value);
-      const desv_pct = clampPct(parseFloat(document.getElementById('desvalorizacao').value)) / 100;
       const T = parseInt(document.getElementById('prazo').value,10);
       const mensalidade = parseMoney(document.getElementById('mensalidade').value);
-      const reaj = clampPct(parseFloat(document.getElementById('reajuste').value)) / 100;
-      const extra_anual = parseMoney(document.getElementById('extra').value);
       const r_pct = clampPct(parseFloat(document.getElementById('rentabilidade').value)) / 100;
 
-      if(P<=0 || T<=0){
+      const ipva_pct = clampPct(parseFloat(document.getElementById('ipva_pct').value)) / 100;
+      const seguro_anual = parseMoney(document.getElementById('seguro_anual').value);
+      const manut_anual = parseMoney(document.getElementById('manut_anual').value);
+      const manut_meses = Math.max(1, parseInt(document.getElementById('manut_meses').value || '12',10));
+
+      const desval_inicial = clampPct(parseFloat(document.getElementById('desval_inicial').value)) / 100;
+      const desval_anual = clampPct(parseFloat(document.getElementById('desval_anual').value)) / 100;
+
+      const reaj_pct = clampPct(parseFloat(document.getElementById('reajuste_pct').value)) / 100;
+      const extra_anual = parseMoney(document.getElementById('extra_anual').value);
+
+      if(P<=0 || !Number.isFinite(T) || T<=0){
         showToast('Preencha o preço do carro e o prazo.');
         return;
       }
 
       const anos = T/12;
 
-      // Revenda (base)
-      let revenda = P * Math.pow(1 - desv_pct, anos);
+      let revenda = P * (1 - desval_inicial) * Math.pow(1 - desval_anual, anos);
 
-      // Advanced: saída + desconto vs FIPE
-      const desval_saida = clampPct(parseFloat(document.getElementById('desval-saida').value));
-      if(desval_saida>0) revenda = revenda * (1 - desval_saida/100);
-
-      const desconto_fipe = clampPct(parseFloat(document.getElementById('desconto-fipe').value));
-      if(desconto_fipe>0) revenda = revenda * (1 - desconto_fipe/100);
-
-      // Compra custos
-      const ipva_anual = P * ipva_pct;
-      const ipva_total = ipva_anual * anos;
+      const ipva_total = (P * ipva_pct) * anos;
       const seguro_total = seguro_anual * anos;
 
-      let revisao_total = revisao_anual * anos;
-      const revisao_meses = parseFloat(document.getElementById('revisao-meses').value) || 0;
-      if(revisao_meses>0){
-        const num = Math.ceil(T / revisao_meses);
-        const custoPorRevisao = revisao_anual / Math.max(1, (12 / revisao_meses)); // aproxima
-        revisao_total = num * custoPorRevisao;
-      }
+      const num_manut = Math.ceil(T / manut_meses);
+      const custo_por_evento = manut_anual / Math.max(1, (12 / manut_meses));
+      const manut_total = num_manut * custo_por_evento;
 
       const fator = Math.pow(1 + r_pct, anos);
       const ganho_potencial = P * (fator - 1);
 
-      const custo_compra_total =
-        (ipva_total + seguro_total + revisao_total) + (P - revenda) + ganho_potencial;
+      const desval_total = Math.max(0, P - revenda);
+      const recorr_total = ipva_total + seguro_total + manut_total;
 
-      // Assinatura mensalidades com reajuste anual por blocos
+      const custo_compra_total = recorr_total + desval_total + ganho_potencial;
+
       let mens_total = 0;
       const anos_cheios = Math.floor(T/12);
       const meses_restantes = T % 12;
       for(let k=0;k<anos_cheios;k++){
-        mens_total += 12 * mensalidade * Math.pow(1 + reaj, k);
+        mens_total += 12 * mensalidade * Math.pow(1 + reaj_pct, k);
       }
-      mens_total += meses_restantes * mensalidade * Math.pow(1 + reaj, anos_cheios);
-
-      // Advanced: km excedente e taxas
-      const km_contratado = parseFloat(document.getElementById('km-contratado').value) || 0;
-      const km_usado = parseFloat(document.getElementById('km-usado').value) || 0;
-      const custo_km = parseMoney(document.getElementById('custo-km').value);
-      let custo_excedente_total = 0;
-      if(km_contratado>0 && km_usado>0 && custo_km>0){
-        const excedente_mensal = Math.max(0, km_usado - km_contratado);
-        custo_excedente_total = excedente_mensal * T * custo_km;
-      }
-      const taxa_adesao = parseMoney(document.getElementById('taxa-adesao').value);
-      const taxa_devolucao = parseMoney(document.getElementById('taxa-devolucao').value);
-
-      mens_total += custo_excedente_total + taxa_adesao + taxa_devolucao;
+      mens_total += meses_restantes * mensalidade * Math.pow(1 + reaj_pct, anos_cheios);
 
       const extra_total = extra_anual * anos;
+
       let custo_ass_total = (mens_total + extra_total) - ganho_potencial;
       custo_ass_total = Math.max(0, custo_ass_total);
 
@@ -747,38 +821,34 @@
       const diff_anual  = Math.abs(anual_compra - anual_ass);
       const diff_total  = Math.abs(custo_compra_total - custo_ass_total);
 
-      // Driver
-      const desval_comp = (P - revenda);
-      const recorr = (ipva_total + seguro_total + revisao_total);
-      const oportunidade = ganho_potencial;
-      const assinatura_mens = mens_total;
+      const driverCompra = [
+        {k:'Desvalorização', v: desval_total},
+        {k:'Custos recorrentes', v: recorr_total},
+        {k:'Custo do dinheiro', v: ganho_potencial}
+      ].sort((a,b)=>b.v-a.v)[0].k;
 
-      let driver = '';
-      if(winner === 'COMPRA'){
-        if(assinatura_mens >= desval_comp && assinatura_mens >= recorr) driver = 'a';
-        else if(desval_comp >= assinatura_mens && desval_comp >= recorr) driver = 'c';
-        else driver = 'a';
-      }else{
-        driver = 'b';
-      }
+      const driverAss = [
+        {k:'Mensalidades', v: mens_total},
+        {k:'Extras', v: extra_total},
+        {k:'Benefício do dinheiro', v: ganho_potencial}
+      ].sort((a,b)=>b.v-a.v)[0].k;
 
       let insightText = '';
       if(winner === 'COMPRA'){
-        if(driver === 'a'){
-          insightText = `No seu perfil, <b>COMPRAR</b> é a opção financeiramente mais eficiente. Em <b>${T} meses</b>, a diferença acumulada é de <b>${formatCurrency(diff_total)}</b> — principalmente porque <b>a mensalidade acumulada da assinatura</b> pesa mais do que os custos do carro.`;
-        }else{
-          insightText = `No seu perfil, <b>COMPRAR</b> é a opção financeiramente mais eficiente. Em <b>${T} meses</b>, a diferença acumulada é de <b>${formatCurrency(diff_total)}</b> — principalmente porque, no seu prazo, <b>a desvalorização estimada</b> pesa menos do que a diferença entre as opções.`;
-        }
+        insightText =
+          `No seu perfil, COMPRAR é mais eficiente. Em ${T} meses, você economiza ${formatCurrency(diff_total)}. ` +
+          `O que mais pesa na compra é: ${driverCompra}.`;
       }else{
-        insightText = `No seu perfil, <b>ASSINAR</b> é a opção financeiramente mais eficiente. Em <b>${T} meses</b>, a diferença acumulada é de <b>${formatCurrency(diff_total)}</b> — principalmente porque <b>seu capital rendendo</b> reduz o custo líquido do contrato.`;
+        insightText =
+          `No seu perfil, ASSINAR é mais eficiente. Em ${T} meses, você economiza ${formatCurrency(diff_total)}. ` +
+          `O que mais pesa na assinatura é: ${driverAss}.`;
       }
 
-      // Render
       document.getElementById('winner-badge').textContent = winner;
       document.getElementById('winner-value').textContent = formatCurrency(winner_value) + ' / mês';
       document.getElementById('other-option').textContent  = 'A outra opção: ' + formatCurrency(other_value) + ' / mês';
       document.getElementById('difference').textContent    = 'Diferença: ' + formatCurrency(diff_mensal) + ' / mês';
-      document.getElementById('insight-text').innerHTML  = insightText;
+      document.getElementById('insight-text').textContent  = insightText;
 
       document.getElementById('compra-anual').textContent = formatCurrency(anual_compra);
       document.getElementById('assinatura-anual').textContent = formatCurrency(anual_ass);
@@ -788,231 +858,132 @@
       document.getElementById('assinatura-total').textContent = formatCurrency(custo_ass_total);
       document.getElementById('diff-total').textContent = formatCurrency(diff_total);
 
-      // small notes
       document.getElementById('compra-anual-note').textContent = `~ ${formatCurrency(mensal_compra)} / mês`;
       document.getElementById('assinatura-anual-note').textContent = `~ ${formatCurrency(mensal_ass)} / mês`;
+      document.getElementById('assinatura-anual-note').textContent = `~ ${formatCurrency(mensal_ass)} / mês`;
 
-      resultadoAtual = {
-        winner, diff_mensal, diff_total, T,
-        totals: { compra: custo_compra_total, ass: custo_ass_total },
-        comps: {
-          compra: {desval: desval_comp, recorr: recorr, oportunidade: oportunidade},
-          ass: {mens: mens_total, extra: extra_total, oportunidade: oportunidade}
-        },
-        series: buildSeries(T, {
-          P, ipva_pct, seguro_anual, revisao_anual, desv_pct, r_pct,
-          mensalidade, reaj, extra_anual,
-          adv: {desval_saida, desconto_fipe, revisao_meses, km_contratado, km_usado, custo_km, taxa_adesao, taxa_devolucao}
-        })
-      };
-
-      // Charts
-      drawLineChart('chartLine', resultadoAtual.series.labels, resultadoAtual.series.compra, resultadoAtual.series.ass);
-      drawBarChart('chartBars', [
-        {name:'Compra: desvalorização', v: desval_comp},
-        {name:'Compra: recorrentes', v: recorr},
-        {name:'Compra: custo do dinheiro', v: oportunidade},
-        {name:'Assinatura: mensalidades', v: mens_total},
-        {name:'Assinatura: extras', v: (extra_total + custo_excedente_total + taxa_adesao + taxa_devolucao)}
+      drawGroupedBars('chartTotal', [
+        {label:'Compra', value:custo_compra_total},
+        {label:'Assinatura', value:custo_ass_total}
       ]);
+
+      drawMix('chartMix', [
+        {label:'Compra: Desvalorização', value:desval_total},
+        {label:'Compra: Recorrentes', value:recorr_total},
+        {label:'Compra: Custo do dinheiro', value:ganho_potencial},
+        {label:'Assinatura: Mensalidades', value:mens_total},
+        {label:'Assinatura: Extras', value:extra_total},
+        {label:'Assinatura: Benefício do dinheiro', value:ganho_potencial}
+      ]);
+
+      resultadoAtual = { winner, diff_mensal, diff_total, T };
 
       showScreen('screen-result');
     }
 
-    /* ---------- Series builder (monthly accumulated) ---------- */
-    function buildSeries(T, inp){
-      const labels = [];
-      const compra = [];
-      const ass = [];
-
-      const anos = T/12;
-
-      // Precompute revenda base to allocate desval "smoothly" (MVP-friendly):
-      let revenda = inp.P * Math.pow(1 - inp.desv_pct, anos);
-      if(inp.adv.desval_saida>0) revenda = revenda * (1 - inp.adv.desval_saida/100);
-      if(inp.adv.desconto_fipe>0) revenda = revenda * (1 - inp.adv.desconto_fipe/100);
-
-      const desval_total = inp.P - revenda;
-      const recorr_total = (inp.P*inp.ipva_pct*anos) + (inp.seguro_anual*anos);
-      // revisao total
-      let revisao_total = inp.revisao_anual*anos;
-      if(inp.adv.revisao_meses>0){
-        const num = Math.ceil(T / inp.adv.revisao_meses);
-        const custoPorRevisao = inp.revisao_anual / Math.max(1, (12 / inp.adv.revisao_meses));
-        revisao_total = num * custoPorRevisao;
-      }
-      const recorr2_total = revisao_total;
-      const recorr_all = recorr_total + recorr2_total;
-
-      const fator = Math.pow(1 + inp.r_pct, anos);
-      const oportunidade_total = inp.P * (fator - 1);
-
-      // For charting: distribute components monthly (simple, not "finance-grade")
-      const compra_m_recorr = recorr_all / T;
-      const compra_m_desval = desval_total / T;
-      const compra_m_opor = oportunidade_total / T;
-
-      // Assinatura monthly with annual reaj blocks + extras spread
-      const extra_total = inp.extra_anual * anos;
-      let extraAdv = 0;
-      if(inp.adv.km_contratado>0 && inp.adv.km_usado>0 && inp.adv.custo_km>0){
-        extraAdv += Math.max(0, inp.adv.km_usado - inp.adv.km_contratado) * T * inp.adv.custo_km;
-      }
-      extraAdv += (inp.adv.taxa_adesao || 0) + (inp.adv.taxa_devolucao || 0);
-
-      const ass_m_extra = (extra_total + extraAdv) / T;
-      const ass_m_opor_benef = oportunidade_total / T; // benefit (subtract)
-
-      let accC = 0, accA = 0;
-      for(let m=1;m<=T;m++){
-        labels.push(m);
-        // Compra
-        accC += (compra_m_recorr + compra_m_desval + compra_m_opor);
-        compra.push(accC);
-
-        // Assinatura
-        const yearIndex = Math.floor((m-1)/12); // 0,1,2...
-        const mensal = inp.mensalidade * Math.pow(1 + inp.reaj, yearIndex);
-        accA += (mensal + ass_m_extra - ass_m_opor_benef);
-        ass.push(Math.max(0, accA));
-      }
-      return {labels, compra, ass};
+    function clearCanvas(id){
+      const c = document.getElementById(id);
+      if(!c) return null;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0,0,c.width,c.height);
+      return {c, ctx};
     }
 
-    /* ---------- Minimal charts (no libs) ---------- */
-    function drawLineChart(canvasId, labels, s1, s2){
-      const c = document.getElementById(canvasId);
-      if(!c) return;
-      const ctx = c.getContext('2d');
-      const w = c.width, h = c.height;
+    function drawGroupedBars(canvasId, bars){
+      const obj = clearCanvas(canvasId);
+      if(!obj) return;
+      const {c, ctx} = obj;
+      const w=c.width, h=c.height;
 
-      // Clear
-      ctx.clearRect(0,0,w,h);
+      const pL=46, pR=18, pT=18, pB=34;
+      const innerW = w - pL - pR;
+      const innerH = h - pT - pB;
 
-      // padding
-      const p = 34;
-      const innerW = w - p*2;
-      const innerH = h - p*2;
+      const maxV = Math.max(...bars.map(b=>b.value), 1);
 
-      const maxV = Math.max(...s1, ...s2, 1);
-      const minV = 0;
-
-      // Axes
-      ctx.strokeStyle = '#EAEAEA';
+      ctx.strokeStyle = 'rgba(17,24,39,.14)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(p, p);
-      ctx.lineTo(p, h-p);
-      ctx.lineTo(w-p, h-p);
+      ctx.moveTo(pL, pT);
+      ctx.lineTo(pL, h-pB);
+      ctx.lineTo(w-pR, h-pB);
       ctx.stroke();
 
-      // Grid lines (3)
-      ctx.fillStyle = '#7b8c9b';
+      ctx.fillStyle = 'rgba(107,114,128,.95)';
       ctx.font = '12px -apple-system, Segoe UI, Inter, sans-serif';
       for(let i=0;i<=3;i++){
-        const y = p + (innerH * (i/3));
-        ctx.strokeStyle = '#F0F0F0';
-        ctx.beginPath(); ctx.moveTo(p, y); ctx.lineTo(w-p, y); ctx.stroke();
-        const val = maxV * (1 - i/3);
+        const y = pT + innerH*(i/3);
+        ctx.strokeStyle = 'rgba(17,24,39,.06)';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(w-pR, y); ctx.stroke();
+        const val = maxV*(1 - i/3);
         ctx.fillText('R$ ' + formatMoneyRaw(val), 6, y+4);
       }
 
-      function plot(series, color){
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        for(let i=0;i<series.length;i++){
-          const x = p + innerW * (i/(series.length-1 || 1));
-          const y = p + innerH * (1 - (series[i]-minV)/(maxV-minV || 1));
-          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-      }
+      const barW = innerW / (bars.length*2 + (bars.length-1));
+      let x = pL + barW;
 
-      // Two lines (use palette variants without being heavy)
-      plot(s1, '#5D7A99'); // compra
-      plot(s2, '#2C3E50'); // assinatura (darker)
+      bars.forEach((b, idx)=>{
+        const bh = innerH * (b.value / maxV);
+        const y = (h-pB) - bh;
 
-      // Legend
-      ctx.fillStyle = '#2C3E50';
-      ctx.font = '13px -apple-system, Segoe UI, Inter, sans-serif';
-      ctx.fillText('Compra', p, 18);
-      ctx.fillStyle = '#2C3E50';
-      ctx.fillText('Assinatura', p+80, 18);
+        ctx.fillStyle = (idx===0) ? 'rgba(17,24,39,.85)' : 'rgba(17,24,39,.45)';
+        ctx.fillRect(x, y, barW*2, bh);
 
-      // last points
-      function dot(series, color){
-        const i = series.length-1;
-        const x = p + innerW;
-        const y = p + innerH * (1 - (series[i]-minV)/(maxV-minV || 1));
-        ctx.fillStyle = color;
-        ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2); ctx.fill();
-      }
-      dot(s1, '#5D7A99');
-      dot(s2, '#2C3E50');
+        ctx.fillStyle = 'rgba(17,24,39,.85)';
+        ctx.font = '12px -apple-system, Segoe UI, Inter, sans-serif';
+        ctx.fillText(b.label, x, h-12);
+
+        ctx.font = '12px -apple-system, Segoe UI, Inter, sans-serif';
+        ctx.fillText(formatCurrency(b.value), x, Math.max(pT+12, y-6));
+
+        x += (barW*3);
+      });
     }
 
-    function drawBarChart(canvasId, items){
-      const c = document.getElementById(canvasId);
-      if(!c) return;
-      const ctx = c.getContext('2d');
-      const w = c.width, h = c.height;
+    function drawMix(canvasId, items){
+      const obj = clearCanvas(canvasId);
+      if(!obj) return;
+      const {c, ctx} = obj;
+      const w=c.width, h=c.height;
 
-      ctx.clearRect(0,0,w,h);
-      const p = 18;
-      const barH = 18;
-      const gap = 12;
-      const startY = 30;
+      const p=16;
+      const startY=28;
+      const rowH=22;
+      const gap=10;
 
-      const maxV = Math.max(...items.map(x=>x.v), 1);
+      const maxV = Math.max(...items.map(i=>i.value), 1);
+
       ctx.font = '12px -apple-system, Segoe UI, Inter, sans-serif';
 
-      for(let i=0;i<items.length;i++){
-        const y = startY + i*(barH+gap);
+      items.forEach((it, i)=>{
+        const y = startY + i*(rowH+gap);
+        if(y + rowH > h - 10) return;
 
-        // labels
-        ctx.fillStyle = '#607284';
-        ctx.fillText(items[i].name, p, y-4);
+        ctx.fillStyle = 'rgba(107,114,128,.95)';
+        ctx.fillText(it.label, p, y-4);
 
-        // bar bg
-        ctx.fillStyle = '#F0F4F8';
-        ctx.fillRect(p, y, w - p*2, barH);
+        ctx.fillStyle = 'rgba(17,24,39,.06)';
+        ctx.fillRect(p, y, w - p*2, rowH);
 
-        // bar fg
-        const bw = (w - p*2) * (items[i].v / maxV);
-        ctx.fillStyle = '#5D7A99';
-        ctx.fillRect(p, y, bw, barH);
+        const bw = (w - p*2) * (it.value / maxV);
+        ctx.fillStyle = (it.label.startsWith('Compra')) ? 'rgba(17,24,39,.75)' : 'rgba(17,24,39,.35)';
+        ctx.fillRect(p, y, bw, rowH);
 
-        // value
-        ctx.fillStyle = '#243241';
-        ctx.font = '12px -apple-system, Segoe UI, Inter, sans-serif';
-        ctx.fillText(formatCurrency(items[i].v), p + Math.min(bw + 6, (w - p*2) - 60), y + 13);
-      }
+        ctx.fillStyle = 'rgba(17,24,39,.85)';
+        ctx.fillText(formatCurrency(it.value), p + Math.min(bw + 8, (w - p*2) - 90), y + 15);
+      });
     }
 
-    /* ---------- Advanced panel ---------- */
-    function toggleAdvanced(){
-      const panel = document.getElementById('advanced-panel');
-      const isOpen = panel.style.display === 'block';
-      panel.style.display = isOpen ? 'none' : 'block';
-      if(!isOpen) window.scrollTo({top: panel.offsetTop - 60, behavior:'smooth'});
-    }
-    function resetarAvancado(){
-      ['desval-saida','desconto-fipe','revisao-meses','km-contratado','km-usado','custo-km','taxa-adesao','taxa-devolucao']
-        .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-      showToast('Campos avançados resetados.');
-    }
-
-    /* ---------- Share ---------- */
     function compartilhar(){
-      if(!resultadoAtual){
-        showToast('Calcule antes de compartilhar.');
-        return;
-      }
-      const texto =
+      const url = window.location.href;
+      let texto =
 `🚗 Comprar ou assinar um carro?
-Usei o DecideCar (RCO Labs) para comparar comprar vs assinar. No meu perfil, deu ${resultadoAtual.winner} com diferença de ${formatCurrency(resultadoAtual.diff_mensal)}/mês no prazo de ${resultadoAtual.T} meses. Testa também e decide com número, não com achismo.
-Simule aqui: ${window.location.href}`;
+Usei o DecideCar (RCO Labs) para comparar comprar vs assinar.`;
+      if(resultadoAtual){
+        texto += ` No meu perfil, deu ${resultadoAtual.winner} com diferença de ${formatCurrency(resultadoAtual.diff_mensal)}/mês no prazo de ${resultadoAtual.T} meses.`;
+      }
+      texto += ` Testa também e decide com número, não com achismo.\nSimule aqui: ${url}`;
+
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(texto).then(()=>showToast('Copiado!')).catch(()=>fallbackCopy(texto));
       }else{
@@ -1029,7 +1000,6 @@ Simule aqui: ${window.location.href}`;
       document.body.removeChild(ta);
     }
 
-    // Load persisted inputs on boot (nice UX)
     loadFromLocalStorage();
   </script>
 </body>
