@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -182,9 +180,6 @@
 
       <button class="btn" onclick="goToInputs()">Começar (Modo rápido)</button>
       <button class="btn secondary" style="margin-top:10px" onclick="goToInputs(true)">Começar (Modo avançado)</button>
-
-      <div class="link" onclick="openManifesto()">Por trás do DecideCar</div>
-
       <div class="disclaimer" style="margin-top:16px">
         Ferramenta de apoio à decisão. Resultados dependem das premissas informadas.
       </div>
@@ -436,7 +431,7 @@
         </div>
       </div>
 
-      <div class="link" onclick="openManifesto()">Sobre a RCO Labs</div>
+      <div class="link" onclick="openManifesto()">Por trás do DecideCar →</div>
 
       <div class="disclaimer">
         DecideCar — by RCO Labs • Ferramenta de apoio à decisão. Resultados dependem das premissas informadas.
@@ -458,45 +453,90 @@
       </ul>
       <button class="btn" style="margin-top:12px" onclick="closeModal()">Entendi</button>
     
-  <!-- Manifesto Modal -->
+    <!-- Manifesto Modal -->
   <div id="manifestoModal" class="modal" onclick="closeManifesto(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <h3>Por trás do DecideCar</h3>
 
-      <p><strong>RCO Labs</strong><br>
-      Decisão melhor começa com estrutura melhor.</p>
+      <div style="margin-top:10px">
+        <div class="muted" style="font-weight:900;letter-spacing:.02em">RCO Labs</div>
+        <div style="margin-top:6px;font-weight:900">Decisão melhor começa com estrutura melhor.</div>
 
-      <p>
-        A RCO Labs nasce da inquietação com decisões importantes sendo tomadas com base em sensação, discurso pronto ou hábito.
-      </p>
+        <p style="margin-top:10px">
+          A RCO Labs nasce de uma inquietação simples:<br>
+          boas decisões seguem sendo tomadas com base em intuição, hábito ou discurso pronto — quando poderiam ser tomadas com clareza, estrutura e números simples.
+        </p>
 
-      <p>
-        Não criamos ferramentas para parecer inteligentes.<br>
-        Criamos ferramentas para <strong>tornar decisões mais óbvias</strong>.
-      </p>
+        <p style="margin-top:10px">
+          Nós não construímos ferramentas para parecer inteligentes.<br>
+          Construímos ferramentas para tornar decisões mais óbvias.
+        </p>
 
-      <hr style="border:none;border-top:1px solid #EFEFEF;margin:14px 0">
+        <p style="margin-top:10px;font-weight:900">Acreditamos que:</p>
+        <ul style="margin:6px 0 0 18px;color:var(--muted);font-weight:700;line-height:1.45">
+          <li>complexidade deve ficar no bastidor,</li>
+          <li>a interface deve ser simples,</li>
+          <li>e o resultado precisa orientar uma escolha real.</li>
+        </ul>
 
-      <p><strong>DecideCar</strong><br>
-      Comprar ou assinar não deveria ser confuso.</p>
+        <p style="margin-top:10px">
+          RCO Labs é um laboratório de produtos práticos, criados para pessoas que precisam decidir hoje — não para apresentações bonitas amanhã.
+        </p>
 
-      <p>
-        O DecideCar não escolhe lados. Ele organiza os números.
-      </p>
-
-      <p>
-        Entram na conta a desvalorização real do carro, custos recorrentes e o custo (ou benefício) do dinheiro ao longo do tempo.
-      </p>
-
-      <p>
-        O objetivo é simples: ajudar você a decidir com critério, não com achismo.
-      </p>
-
-      <div style="margin-top:14px">
-        <button class="btn" onclick="closeManifesto()">Entendi</button>
+        <p style="margin-top:10px;font-weight:900">
+          Menos achismo.<br>
+          Mais critério.<br>
+          Mais decisão.
+        </p>
       </div>
+
+      <div class="divider" style="margin:14px 0"></div>
+
+      <div>
+        <div class="muted" style="font-weight:900;letter-spacing:.02em">DecideCar</div>
+        <div style="margin-top:6px;font-weight:900">Decidir carro não deveria ser confuso.</div>
+
+        <p style="margin-top:10px">
+          Comprar ou assinar um carro virou um debate raso.<br>
+          De um lado, quem defende posse.<br>
+          Do outro, quem vende conveniência.
+        </p>
+
+        <p style="margin-top:10px">
+          O DecideCar não escolhe lados.<br>
+          Ele organiza os números.
+        </p>
+
+        <p style="margin-top:10px">
+          Aqui, a decisão não vem de opinião, discurso ou “sensação”.<br>
+          Vem do custo real — mensal, anual e no prazo total — considerando o que mais pesa e quase nunca é comparado:<br>
+          o custo do dinheiro, o tempo e a desvalorização.
+        </p>
+
+        <p style="margin-top:10px;font-weight:900">
+          O DecideCar existe para responder uma única pergunta:
+        </p>
+
+        <p style="margin-top:6px;font-weight:900;font-size:16px">
+          Qual opção custa menos no seu perfil?
+        </p>
+
+        <p style="margin-top:10px;font-weight:900">
+          Sem cadastro.<br>
+          Sem anúncio.<br>
+          Sem viés.
+        </p>
+
+        <p style="margin-top:10px">
+          Só números claros para uma decisão melhor.
+        </p>
+      </div>
+
+      <button class="btn" style="margin-top:14px" onclick="closeManifesto()">Entendi</button>
     </div>
   </div>
+
+</div>
 
 
   </div>
@@ -980,7 +1020,7 @@ Simule aqui: ${window.location.href}`;
       }
     }
     function fallbackCopy(text){
-      const ta = document.createElement('textarea');  
+      const ta = document.createElement('textarea');
       ta.value = text;
       document.body.appendChild(ta);
       ta.select();
