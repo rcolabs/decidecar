@@ -673,7 +673,7 @@ function drawLineChart(prazo, custoCompraTotal, custoAssTotal){
 }
 
   // --- Share (WhatsApp / Email / etc.) ---
-  function buildShareText(longVersion=true){
+  function buildShareText(longVersion=true, includeLink=true){
     const d = window.__decidecarShare;
     if(!d || !d.winner || !d.prazo){ return null; }
     const diff = formatBRL(d.diffMensal || 0);
@@ -681,37 +681,44 @@ function drawLineChart(prazo, custoCompraTotal, custoAssTotal){
     const winner = d.winner;
     const url = d.url || 'https://rcolabs.github.io/decidecar/';
     if(longVersion){
-      return `🚗 Comprar ou assinar um carro?
-`+
-        `Usei o DecideCar (RCO Labs) para comparar comprar vs assinar. No meu perfil, deu ${winner} com diferença de ${diff}/mês no prazo de ${prazo} meses. Testa também e decide com número, não com achismo.
-`+
-        `Simule aqui: ${url}`;
+      const base =
+        `🚗 Comprar ou assinar um carro?\n`+
+        `Usei o DecideCar (RCO Labs) para comparar comprar vs assinar. No meu perfil, deu ${winner} com diferença de ${diff}/mês no prazo de ${prazo} meses. Testa também e decide com número, não com achismo.\n`;
+      return includeLink ? (base + `Simule aqui: ${url}`) : base.trim();
     }
-    return `🚗 Fiz a conta de comprar vs assinar carro. No meu perfil, deu ${winner}.
-Testa aqui e vê no seu: ${url}`;
+    const short =
+      `🚗 Fiz a conta de comprar vs assinar carro. No meu perfil, deu ${winner}.\n`+
+      `Testa aqui e vê no seu: ${url}`;
+    return includeLink ? short : short.replace(url,'').replace(/:\s*$/,'').trim();
   }
 
   async function shareDecision(){
-    const text = buildShareText(true);
-    if(!text){
+    // Para evitar link duplicado no iOS/WhatsApp, usamos:
+    // - navigator.share: texto SEM o link + campo `url` separado
+    // - fallback WhatsApp: texto COM o link
+    const url = (window.__decidecarShare && window.__decidecarShare.url) || 'https://rcolabs.github.io/decidecar/';
+    const textWithLink = buildShareText(true, true);
+    if(!textWithLink){
       alert('Calcule primeiro para gerar um resultado e compartilhar.');
       return;
     }
-    const url = (window.__decidecarShare && window.__decidecarShare.url) || 'https://rcolabs.github.io/decidecar/';
     try{
       if(navigator.share){
-        await navigator.share({ title: 'DecideCar — RCO Labs', text, url });
+        const textNoLink = buildShareText(true, false) || textWithLink;
+        await navigator.share({ title: 'DecideCar — RCO Labs', text: textNoLink, url });
         return;
       }
     }catch(e){
       // fall through to WhatsApp
     }
-    const wa = 'https://wa.me/?text=' + encodeURIComponent(text);
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(textWithLink);
     window.open(wa, '_blank', 'noopener,noreferrer');
   }
 
+
+
   async function copyShareText(){
-    const text = buildShareText(true);
+    const text = buildShareText(true, true);
     if(!text){
       alert('Calcule primeiro para gerar um resultado e compartilhar.');
       return;
