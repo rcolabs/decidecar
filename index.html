@@ -21,6 +21,11 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Inter,sans-s
 .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
 .btn{width:100%;padding:14px;border-radius:14px;border:none;font-weight:900;
  background:var(--primaryBg);color:var(--primaryInk);cursor:pointer}
+.btnAlt{margin-top:10px;background:transparent;border:1px solid var(--border);color:var(--text)}
+.btnGhost{margin-top:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text)}
+.shareRow{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+@media (min-width:560px){.shareRow{grid-template-columns:1fr 1fr}}
+
 .link{background:none;border:none;color:var(--text);text-decoration:underline;font-weight:800;cursor:pointer}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .mode-toggle{display:flex;gap:8px;margin-top:8px}
@@ -224,6 +229,12 @@ canvas{width:100%;height:180px;display:block;border-radius:10px;background:rgba(
       Por trás do DecideCar →
     </button>
     <p class="note">Ferramenta de apoio à decisão. Resultados dependem das premissas.</p>
+    <div class="shareRow" aria-label="Compartilhar">
+      <button class="btn btnAlt" type="button" onclick="shareDecision()">Compartilhar decisão</button>
+      <button class="btn btnGhost" type="button" onclick="copyShareText()">Copiar texto</button>
+    </div>
+    <p class="note" style="margin-top:8px">Convide alguém para testar no próprio perfil (WhatsApp, e-mail, mensagens).</p>
+
   </div>
 </div>
 
@@ -510,7 +521,18 @@ function calc(){
   const mensalAss = custoAssTotal / prazo;
   const diffTotal = Math.abs(custoCompraTotal - custoAssTotal);
 
+  const diffMensal = Math.abs(mensalCompra - mensalAss);
+
+  // share payload (latest result)
+  window.__decidecarShare = {
+    winner: null,
+    diffMensal,
+    prazo,
+    url: 'https://rcolabs.github.io/decidecar/'
+  };
+
   const winner = mensalCompra <= mensalAss ? 'COMPRA' : 'ASSINATURA';
+  if (window.__decidecarShare) window.__decidecarShare.winner = winner;
   const winnerMensal = winner === 'COMPRA' ? mensalCompra : mensalAss;
   const otherMensal = winner === 'COMPRA' ? mensalAss : mensalCompra;
 
@@ -649,6 +671,66 @@ function drawLineChart(prazo, custoCompraTotal, custoAssTotal){
   ctx.textBaseline = 'top';
   ctx.fillText('Tempo (meses)', padL+cw/2, h-padB+4);
 }
+
+  // --- Share (WhatsApp / Email / etc.) ---
+  function buildShareText(longVersion=true){
+    const d = window.__decidecarShare;
+    if(!d || !d.winner || !d.prazo){ return null; }
+    const diff = formatBRL(d.diffMensal || 0);
+    const prazo = d.prazo;
+    const winner = d.winner;
+    const url = d.url || 'https://rcolabs.github.io/decidecar/';
+    if(longVersion){
+      return `🚗 Comprar ou assinar um carro?
+`+
+        `Usei o DecideCar (RCO Labs) para comparar comprar vs assinar. No meu perfil, deu ${winner} com diferença de ${diff}/mês no prazo de ${prazo} meses. Testa também e decide com número, não com achismo.
+`+
+        `Simule aqui: ${url}`;
+    }
+    return `🚗 Fiz a conta de comprar vs assinar carro. No meu perfil, deu ${winner}.
+Testa aqui e vê no seu: ${url}`;
+  }
+
+  async function shareDecision(){
+    const text = buildShareText(true);
+    if(!text){
+      alert('Calcule primeiro para gerar um resultado e compartilhar.');
+      return;
+    }
+    const url = (window.__decidecarShare && window.__decidecarShare.url) || 'https://rcolabs.github.io/decidecar/';
+    try{
+      if(navigator.share){
+        await navigator.share({ title: 'DecideCar — RCO Labs', text, url });
+        return;
+      }
+    }catch(e){
+      // fall through to WhatsApp
+    }
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(text);
+    window.open(wa, '_blank', 'noopener,noreferrer');
+  }
+
+  async function copyShareText(){
+    const text = buildShareText(true);
+    if(!text){
+      alert('Calcule primeiro para gerar um resultado e compartilhar.');
+      return;
+    }
+    try{
+      await navigator.clipboard.writeText(text);
+      alert('Texto copiado. Cole no WhatsApp ou onde quiser.');
+    }catch(e){
+      // fallback old browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      alert('Texto copiado. Cole no WhatsApp ou onde quiser.');
+    }
+  }
+
 </script>
 </body>
 </html>
